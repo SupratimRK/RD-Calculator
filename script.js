@@ -1,3 +1,6 @@
+// Declare chart variable outside the displayChart function to keep track of the chart instance
+let myRDChart;
+
 function calculateRD() {
     const monthlyDeposit = parseFloat(document.getElementById('monthlyDeposit').value);
     const interestRate = parseFloat(document.getElementById('interestRate').value);
@@ -17,9 +20,6 @@ function calculateRD() {
     displayResult(maturityAmount.toFixed(2), interestEarned.toFixed(2));
     displayChart(totalInvestment, interestEarned);
 }
-
-// The rest of the code remains the same
-
 
 function displayResult(maturityAmount, interestEarned) {
     const resultContainer = document.getElementById('result');
@@ -42,7 +42,14 @@ function formatCurrency(amount) {
 
 function displayChart(principalAmount, interestEarned) {
     const ctx = document.getElementById('myChart').getContext('2d');
-    const myChart = new Chart(ctx, {
+    
+    // Destroy the previous chart instance if it exists
+    if (myRDChart) {
+        myRDChart.destroy();
+    }
+
+    // Create a new chart instance
+    myRDChart = new Chart(ctx, {
         type: 'pie',
         data: {
             labels: ['Principal Amount', 'Interest Earned'],
